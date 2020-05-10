@@ -34,9 +34,16 @@ def checkout(request):
     return render(request,"store/checkout.html",context)
 
 def updateItem(request):
-    data = json.loads(request.body)
-    productID = data['productid']
+    # Information Of What User Has Done
+    data = json.loads(request.body.decode('utf-8'))
+    #json.loads(request.body)
+    # Product To Buy ID
+    productID = data['productId']
+    # Action To Add To Cart Or Something Else You Do
     action = data['action']
+    # Print To Make Sure It Workds
     print('Action:',action)
+    # Print To Make Sure It Workds
     print('productID:', productID)
+    # Show The Data Above Is Chrome Console As Well
     return JsonResponse('item was added',safe=False)

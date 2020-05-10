@@ -8,28 +8,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
 
         <!--var csrftoken = '{{ csrf_token }}';-->
-        <!--CSRF-->
-        <script type="text/javascript">
-    		var user = '{{request.user}}'
+  <!--CSRF-->
+  <script type="text/javascript">
+    var user = '{{request.user}}'
+    function getToken(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+    var csrftoken = getToken('csrftoken');
 
-    		function getToken(name) {
-    		    var cookieValue = null;
-    		    if (document.cookie && document.cookie !== '') {
-    		        var cookies = document.cookie.split(';');
-    		        for (var i = 0; i < cookies.length; i++) {
-    		            var cookie = cookies[i].trim();
-    		            // Does this cookie string begin with the name we want?
-    		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-    		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-    		                break;
-    		            }
-    		        }
-    		    }
-    		    return cookieValue;
-    		}
-    		var csrftoken = getToken('csrf_token')
-
-    	</script>
+  </script>
 
     <title>Ecommerce</title>
     </head>
