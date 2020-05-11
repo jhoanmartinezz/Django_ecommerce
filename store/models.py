@@ -42,6 +42,14 @@ class Order(models.Model):
         orderitems = self.orderitem_set.all()
         total_items = sum([item.quantity for item in orderitems])
         return total_items
+    @property
+    def shipping(self):
+        shipping = False
+        orderitems = self.orderitem_set.all()
+        for k in orderitems:
+            if k.product.digital == False:
+                shipping = True
+            return shipping
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
