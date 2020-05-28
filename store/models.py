@@ -73,3 +73,6 @@ class ShippingAddress(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.address
+
+# class likeProduct(models.Model):
+#         digital = models.BooleanField(default=False, null=True, blank=False)
