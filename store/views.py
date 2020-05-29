@@ -7,49 +7,30 @@ import json
 import datetime
 
 #funcion del cart
-from store.utils import cookieCart
+from store.utils import cookieCart, cartData, guestOrder
 
 def store(request):
-    if request.user.is_authenticated:
-        client = request.user.customer
-        order, created = Order.objects.get_or_create(customer=client, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        cookieData = cookieCart(request)
-        cartItems = cookieData['cartItems']
+    data = cartData(request)
+    cartItems = data['cartItems']
     products = Product.objects.all()
     context = {'products':products,'cartItems':cartItems,}
     return render(request,"store/store.html", context)
 
 
 def cart(request):
-    if request.user.is_authenticated:
-        client = request.user.customer
-        order, created = Order.objects.get_or_create(customer=client, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        #cookie deleted
-        cookieData = cookieCart(request)
-        cartItems = cookieData['cartItems']
-        order = cookieData['order']
-        items = cookieData['items']
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
     context = {'items':items,'order':order,'cartItems':cartItems}
     return render(request,"store/cart.html", context)
 
 
 def checkout(request):
-    if request.user.is_authenticated:
-        client = request.user.customer
-        order, created = Order.objects.get_or_create(customer=client, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        cookieData = cookieCart(request)
-        cartItems = cookieData['cartItems']
-        order = cookieData['order']
-        items = cookieData['items']
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
     context = {'items':items,'order':order,'cartItems':cartItems}
     return render(request,"store/checkout.html",context)
 
@@ -88,12 +69,10 @@ def processOrder(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id
-	#else:
-    #customer, order = guestOrder(request, data)
-    #total = float(data['form']['total'])
-    #order.transaction_id = transaction_id
+    else:
+        customer, order = guestOrder(request, data)
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id
     if total == float(order.get_cart_total):
         order.complete = True
     order.save()
@@ -106,6 +85,4 @@ def processOrder(request):
         	state=data['shipping']['state'],
         	zipcode=data['shipping']['zipcode'],
         	)
-    else:
-        print("Usert not logged in...")
     return JsonResponse('Payment submitted..', safe=False)
