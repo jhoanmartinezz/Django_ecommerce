@@ -3,13 +3,13 @@
 {% block content %}
 <div class="row">
     {% for k in products %}
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <img class="thumbnail" src="{{k.imageURL}}">
         <div class="box-element product">
             <h6><strong>{{k.name}}</strong></h6>
             <hr>
-            <button data-product={{k.id}} data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to cart</button>
-            <a class="btn btn-outline-success" href="{% url 'cart'%}">View</a>
+            <button data-product={{k.id}} data-action="add" class="btn btn-outline-secondary add-btn update-cart" style="padding:5px;">Add to cart</button>
+            <a class="btn btn-outline-success" href="{% url 'cart'%}" style="padding:5px;">View</a>
             <h4 style="display: inline-block; float:right">${{k.price}}</h4>
         </div>
     </div>
